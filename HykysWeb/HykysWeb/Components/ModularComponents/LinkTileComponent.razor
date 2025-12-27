@@ -1,0 +1,26 @@
+﻿<a href="@Link" class="dashboard-tile">
+    <div class="div-tile-content">
+        <!-- Ikona nebo Obrázek -->
+        <div class="div-tile-icon">
+            @if (!string.IsNullOrEmpty(IconClass))
+            {
+                <i class="@IconClass"></i>
+            }
+            else if (!string.IsNullOrEmpty(ImageUrl))
+            {
+                <img src="@ImageUrl" alt="@Title" />
+            }
+        </div>
+
+        <!-- Popisek -->
+        <div class="div-tile-title">@Title</div>
+    </div>
+</a>
+
+
+@code {
+    [Parameter] public string Title { get; set; } = "Odkaz";
+    [Parameter] public string Link { get; set; } = "#";
+    [Parameter] public string IconClass { get; set; }
+    [Parameter] public string ImageUrl { get; set; }
+}

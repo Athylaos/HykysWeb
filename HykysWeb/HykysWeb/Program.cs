@@ -1,4 +1,4 @@
-using HykysWeb.Client.Pages;
+
 using HykysWeb.Components;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,0 +1,272 @@
+﻿
+/*
+    =========================================================================================================================
+    Colours
+    =========================================================================================================================
+*/
+
+:root {
+    --bg-body: #0f172a;
+    --bg-card: #1e293b;
+    --bg-navbar: #1e293b;
+    --bg-hover: #334155;
+
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+
+    --primary: #c2410c;
+    --primary-hover: #9a3412;
+    --primary-soft: rgba(194, 65, 12, 0.2);
+
+    --danger: #ef4444;
+    --success: #22c55e;
+    --border-color: #334155;
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5); /* Výraznější stín */
+}
+
+/*
+    =========================================================================================================================
+    Base
+    =========================================================================================================================
+*/
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-primary);
+}
+
+.panel, .card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+}
+
+.panel-header {
+    border-bottom: 1px solid var(--border-color);
+}
+
+    .panel-header p {
+        color: var(--text-primary);
+    }
+
+/*
+    =========================================================================================================================
+    Navbar
+    =========================================================================================================================
+*/
+
+.div-navbar-main {
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-navbar);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    justify-content: space-between;
+}
+
+    .div-navbar-main ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 10px;
+        width: 100%;
+    }
+
+.contact-btn {
+    background-color: transparent;
+    color: var(--primary);
+    padding: 5px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 500ms;
+    width:140px;
+}
+    .contact-btn span {
+        font-size: 12px;
+    }
+
+.contact-dropdown {
+    position: relative;
+    display: inline-block;
+}
+    .contact-dropdown:hover .contact-btn {
+        background-color: var(--primary-hover);
+        color:var(--text-primary)
+    }
+
+.dropdown-content {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: var(--bg-card);
+    min-width: 180px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    z-index: 1000;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    padding: 5px 0;
+}
+    .dropdown-content a {
+        color: var(--text-primary);
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        transition: background 0.2s;
+    }
+        .dropdown-content a:hover {
+            background-color: var(--bg-hover);
+            color: var(--primary);
+        }
+
+.contact-dropdown:hover .dropdown-content {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(10px);
+}
+
+
+.a-btn-custom {
+    display: block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: 500ms;
+    background-color: transparent;
+    color: var(--text-secondary);
+}
+
+    .a-btn-custom:hover {
+        background-color: var(--bg-hover);
+        color: var(--primary);
+    }
+
+
+.div-aboutme-container{
+    display:flex;
+    flex-flow:column;
+    align-items:center;
+}
+    .div-aboutme-container div {
+        width: 75%;
+        margin: 10px 0;
+    }
+
+/*
+    =========================================================================================================================
+    Dashboard
+    =========================================================================================================================
+*/
+
+.div-dashboard-container{
+    display:flex;
+    flex-flow:row;
+
+}
+.div-calendar-panel, .div-links-panel, .div-todo-panel {
+    background-color: var(--bg-card);
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.div-todo-panel{
+    flex:0.3;
+}
+.div-links-panel {
+    flex:0.4;
+}
+.div-calendar-panel {
+    flex:0.3;
+}
+.div-links-header {
+    margin: 0 0 5px 0;
+    padding: 0 0 5px 0;
+}
+
+.links-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    justify-content: center;
+}
+
+/*
+    =========================================================================================================================
+    LinkTile
+    =========================================================================================================================
+*/
+
+.dashboard-tile {
+    display: block;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text-primary);
+
+    aspect-ratio: 1 / 0.7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+    box-shadow: var(--shadow-sm);
+}
+    .dashboard-tile:hover {
+        transform: translateY(-3px);
+        transform:scale(1.03);
+        background-color: var(--bg-hover);
+        border-color: var(--primary);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+.div-tile-content {
+    text-align: center;
+}
+
+.div-tile-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    color: var(--primary);
+}
+
+.div-tile-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
