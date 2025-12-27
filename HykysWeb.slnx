@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="HykysWeb/HykysWeb.Client/HykysWeb.Client.csproj" />
+  <Project Path="HykysWeb/HykysWeb/HykysWeb.csproj" />
+</Solution>
