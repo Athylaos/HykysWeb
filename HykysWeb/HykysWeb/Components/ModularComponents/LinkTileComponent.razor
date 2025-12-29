@@ -1,26 +1,47 @@
-﻿<a href="@Link" class="dashboard-tile">
-    <div class="div-tile-content">
-        <!-- Ikona nebo Obrázek -->
-        <div class="div-tile-icon">
-            @if (!string.IsNullOrEmpty(IconClass))
-            {
+﻿<a href="@Link" target="_blank" class="dashboard-tile">
+    <div class="tile-content">
+        @if (!string.IsNullOrEmpty(IconClass))
+        {
+            <div class="tile-icon">
                 <i class="@IconClass"></i>
-            }
-            else if (!string.IsNullOrEmpty(ImageUrl))
-            {
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(ImageUrl))
+        {
+            <div class="tile-icon">
                 <img src="@ImageUrl" alt="@Title" />
-            }
-        </div>
+            </div>
+        }
+        else
+        {
+            <div class="tile-icon">
+                <img src="@GetFaviconUrl(Link)" alt="@Title" />
+            </div>
+        }
 
-        <!-- Popisek -->
         <div class="div-tile-title">@Title</div>
     </div>
 </a>
 
-
 @code {
     [Parameter] public string Title { get; set; } = "Odkaz";
     [Parameter] public string Link { get; set; } = "#";
-    [Parameter] public string IconClass { get; set; }
-    [Parameter] public string ImageUrl { get; set; }
+    [Parameter] public string? IconClass { get; set; }
+    [Parameter] public string? ImageUrl { get; set; }
+
+    private string GetFaviconUrl(string url)
+    {
+        if (string.IsNullOrEmpty(url) || url == "#") return "";
+
+        try
+        {
+            var uri = new Uri(url);
+            var domain = uri.Host;
+            return $"https://www.google.com/s2/favicons?domain={domain}&sz=64";
+        }
+        catch
+        {
+            return "";
+        }
+    }
 }

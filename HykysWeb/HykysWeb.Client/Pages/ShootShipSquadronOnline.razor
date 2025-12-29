@@ -1,0 +1,54 @@
+﻿@page "/games/ShootShipSquadron/online"
+
+@rendermode InteractiveAuto
+
+<PageTitle>Shoot Ship Squadron</PageTitle>
+
+<div class="game-container">
+    <div class="unity-wrapper">
+        <iframe src="Games\ShootShipSquadron\index.html"
+                style="width: 1280px; aspect-ratio: 16/9; border: none;                                                                       "
+                allowfullscreen>
+        </iframe>
+    </div>
+    <h3>Ovládání:</h3>
+    <p>W,S - Pitch</p>
+    <p>A, D - Roll</p>
+    <p>Shift - Boost</p>
+    <p>Mezerník - Výstřel</p>
+
+
+</div>
+
+
+
+<style>
+    p{
+        margin:0;
+    }
+    h3{
+        margin:10px 0;
+    }
+    .info-controls{
+        list-style:none;
+    }
+    .game-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        color: white;
+
+    }
+
+    .unity-wrapper {
+        border: 3px solid var(--primary); 
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+</style>
+
+@code {
+
+}
