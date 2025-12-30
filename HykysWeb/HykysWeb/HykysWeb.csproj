@@ -8,8 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\test.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\test.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\HykysWeb.Client\HykysWeb.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\Vids\SSSVideo.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

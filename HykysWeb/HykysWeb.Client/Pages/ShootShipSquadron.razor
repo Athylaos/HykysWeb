@@ -1,0 +1,89 @@
+﻿@page "/games/ShootShipSquadron"
+
+<div class="hero-section" style="background-image: url('Imgs/SSSHeroImg.png');">
+    <div class="hero-overlay">
+        <h1 class="game-title">SHOOT SHIP SQUADRON</h1>
+        <p class="game-subtitle">Vesmírná rogelike střílečka v Unity</p>
+
+        <div class="hero-buttons">
+            <a href="/games/ShootShipSquadron/online" class="btn-play">🎮 Hrát Online</a>
+            <a href="Games/SSS_Installer/SSS_Installer.exe" download class="btn-download">💾 Stáhnout (Windows)</a>
+        </div>
+    </div>
+</div>
+
+<div class="content-container">
+    <div class="info-column">
+        <h2>O Hře</h2>
+        <p>
+            Tato hra vznikla jako můj první skutečný Unity projekt. Cílem bylo vytvořit hru inspirovanou klasikou Space Invaders,
+            ale ve 3D prostoru. Při práci na této hře jsem se naučil základy Unity enginu.
+        </p>
+        <p>
+            Naprogramoval jsem nepřátele tak, aby předvídali pohyb hráče a hráč se jim musel vyhýbat (to fungovalo natolik přesně,
+            že jsem jim musel přidat nepřesnost, aby byla hra hratelná :D), dále jsem přidal několik power-ups, které může hráč sebrat aby dočasně vylepšil svojí
+            loď. A nakonec jsem udělal jednoduché menu, kde si hráč může za získané body vylepšovat loď. Na vytvoření všech 3D assetů
+            ve hře jsem použil Blender. 2D assety jsou dělané v InkScape a Aseprite.
+        </p>
+
+        <h3>Funkce</h3>
+        <ul class="features-list">
+            <li>Procedurální generovaní asteroidů</li>
+            <li>Inteligentní nepřátelé</li>
+            <li>Různé power-ups</li>
+            <li>Vylepšování vesmírné lodi</li>
+            <li>Online žebříček skóre (Coming soon)</li>
+        </ul>
+    </div>
+
+    <div class="tech-column">
+        <div class="tech-card">
+            <h3>🛠️ Použité Technologie</h3>
+            <div class="tech-tags">
+                <span class="tag">Unity</span>
+                <span class="tag">C#</span>
+                <span class="tag">.NET</span>
+                <span class="tag">Blender</span>
+            </div>
+        </div>
+
+        <div class="tech-card">
+            <h3>📊 Statistiky</h3>
+            <div class="stat-row">
+                <span>Status:</span>
+                <strong>Dokončená</strong>
+            </div>
+            <div class="stat-row">
+                <span>Framework:</span>
+                <strong>Unity</strong>
+            </div>
+            <div class="stat-row">
+                <span>Doba vývoje (aktivního):</span>
+                <strong>1-2 měsíce</strong>
+            </div>
+            <div class="stat-row">
+                <span>Verze:</span>
+                <strong>2.2</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-section">
+    <h2>Galerie</h2>
+    <div class="gallery-grid">
+        <img src="/Imgs/SSSInGame.png" alt="Screenshot 1" class="gallery-img" />
+        <img src="/Imgs/SSSMenu.png" alt="Screenshot 2" class="gallery-img" />
+        <img src="/Imgs/SSSUpgrades.png" alt="Screenshot 3" class="gallery-img" />
+    </div>
+    <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/6hPNteFSQVo?rel=0"
+                title="Shoot Ship Squadron Gameplay"
+                frameborder="0"
+                width="100%"
+                height="100%"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+        </iframe>
+    </div>
+</div>

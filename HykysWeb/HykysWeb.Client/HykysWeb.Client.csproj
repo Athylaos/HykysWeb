@@ -14,9 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\Games\SSS_Installer\" />
     <Folder Include="wwwroot\Games\ShootShipSquadron\" />
-    <Folder Include="wwwroot\Imgs\" />
-    <Folder Include="wwwroot\Vids\" />
   </ItemGroup>
 
 </Project>
