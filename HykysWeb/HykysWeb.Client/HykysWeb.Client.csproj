@@ -14,6 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\Games\RJ_Installer\" />
+    <Folder Include="wwwroot\Games\RobosJwlry\" />
     <Folder Include="wwwroot\Games\SSS_Installer\" />
     <Folder Include="wwwroot\Games\ShootShipSquadron\" />
   </ItemGroup>

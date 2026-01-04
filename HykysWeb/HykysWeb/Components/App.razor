@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject NavigationManager NavigationManager
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -21,3 +23,9 @@
 </body>
 
 </html>
+
+
+@if (NavigationManager.Uri.Contains("/projects/RobosJwlry/online") == false)
+{
+    <NavMenu /> <!-- navbar se skrývá na herní stránce -->
+}

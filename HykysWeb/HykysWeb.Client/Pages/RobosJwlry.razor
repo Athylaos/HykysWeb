@@ -1,0 +1,107 @@
+﻿@page "/projects/RobosJwlry"
+<PageTitle>Robo's Jwlry</PageTitle>
+
+<div class="hero-section" style="background-image: url('Imgs/RJHeroImg.png');">
+    <div class="hero-overlay">
+        <h1 class="game-title">ROBO'S JWLRY</h1>
+        <p class="game-subtitle">Idle mining 2D pixel art hra v Unity.</p>
+
+        <div class="hero-buttons">
+            <!--<a href="/games/RobosJwlry/Online" class="btn-play">🎮 Hrát Online</a>-->
+            <a href="Games/RJ_Installer/RJ_Installer.exe" download class="btn-download">💾 Stáhnout (Windows)</a>
+        </div>
+    </div>
+</div>
+
+<div class="content-container">
+    <div class="info-column">
+        <h2>O Hře</h2>
+        <p>
+            Chtěl jsem vytořit hru, která by se dala hrát na pozadí jako například Cookie Clicker. Jako vizuální
+            styl jsem vybral pixel-art, aby měla hra svojí "osobnost". Hlavní cíl bylo naučit se pracovat s větším
+            množstvím dat a komponent hry.
+        </p>
+        <p>
+            Hlavním ůkolem celé hry je odemknout všechny podlaží a všechny předměty. Toho hráč dosáhne pomocí generování elektřiny,
+            těžení surovin, vytvářením složitějších předmětů a jejich prodáváním za mince.
+            Hra obshauje systém stavění budov, kde má hráč na výběr mezi stanicí těžební, výzkumnou,
+            šperkařskou, generátorem a slévárnou, všchny budovy se dají vylepšovat. Hráč může výzkumné
+            body a mince utrácet za výzkum nových předmětů, které může následně vyrábět a prodávat.
+        </p>
+        <p>
+            Při programovaní jsem všechno dělal tak, aby byla hra snadno rozšířitelná, v případě že bych v
+            budoucnu chtěl přidat další ůrovně, suroviny, itemy, questy prostě cokoliv. K tomu jsem využil v Unity
+            ScriptableObject, pomocí kterého jsem vytvořil template pro téměř všechno a v kódu ke všemu přistupuji
+            dynamicky.
+        </p>
+        <p>
+            Celá hra se ukládá do .json souboru, který je uložený v počítači hráče, Následně je možné v nastavení postup exportovat do souboru,
+            nebo načíst. Tímto je možné si svůj save přenést na jiné zařízení, nebo pomocí možnosti resetovaní postupu začít odznova.
+        </p>
+
+        <h3>Funkce</h3>
+        <ul class="features-list">
+            <li>Odemykání podlaží a nových surovin</li>
+            <li>Budování animovaných stanic</li>
+            <li>Vylepšování stanic</li>
+            <li>Vyrábění předmětů</li>
+            <li>Výzkum nových předmětů</li>
+            <li>Export postupu do souboru</li>
+        </ul>
+    </div>
+
+    <div class="tech-column">
+        <div class="tech-card">
+            <h3>🛠️ Použité Technologie</h3>
+            <div class="tech-tags">
+                <span class="tag">Unity</span>
+                <span class="tag">C#</span>
+                <span class="tag">.NET</span>
+                <span class="tag">Aseprite</span>
+            </div>
+        </div>
+
+        <div class="tech-card">
+            <h3>📊 Statistiky</h3>
+            <div class="stat-row">
+                <span>Status:</span>
+                <strong>Dokončená</strong>
+            </div>
+            <div class="stat-row">
+                <span>Framework:</span>
+                <strong>Unity</strong>
+            </div>
+            <div class="stat-row">
+                <span>Započetí vývoje:</span>
+                <strong>4.2025</strong>
+            </div>
+            <div class="stat-row">
+                <span>Doba vývoje:</span>
+                <strong>3-4 měsíce</strong>
+            </div>
+            <div class="stat-row">
+                <span>Verze:</span>
+                <strong>2.4</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-section">
+    <h2>Galerie</h2>
+    <div class="gallery-grid">
+        <img src="/Imgs/RJInGame.png" alt="Screenshot 1" class="gallery-img" />
+        <img src="/Imgs/RJInGameResearch.png" alt="Screenshot 2" class="gallery-img" />
+        <img src="/Imgs/RJIngameSmelting.png" alt="Screenshot 3" class="gallery-img" />
+    </div>
+    <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/J9xuB3MAodk?rel=0"
+                title="Robo's Jwlry Gameplay"
+                frameborder="0"
+                width="100%"
+                height="100%"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+        </iframe>
+    </div>
+</div>
