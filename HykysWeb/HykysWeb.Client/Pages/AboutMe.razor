@@ -1,0 +1,112 @@
+﻿@page "/aboutme"
+@inject IJSRuntime JsRuntime
+@rendermode InteractiveAuto
+
+<PageTitle>O mně</PageTitle>
+
+<section class="about-hero">
+    <div class="hero-content">
+        <h1>Jmenuji se <span class="highlight">David</span></h1>
+        <p class="hero-subtitle">Student IT | Unity Developer | C# Full Stack Developer</p>
+        <div class="hero-buttons">
+            <button @onclick="ScrollToSkills" class="btn-primary">🛠️ Skills
+            </button>
+            <a href="/projects" class="btn-ghost">📱 Projekty</a>
+        </div>
+    </div>
+    <div class="hero-image">
+        <div class="avatar">
+            <img src=""/>
+        </div>
+    </div>
+</section>
+
+<section class="about-me">
+    <div class="about-me-content">
+        <div class="about-text">
+            <h2>Kdo jsem</h2>
+            <p>
+                Jsem <strong>student střední průmyslové školy Františka Křižíka</strong> v Praze v oboru IT.
+                Programovaní se věnuji jak ve volném čase, kde jsem si vyzkoušel např. Python, tak ve škole kde za sebou mám roční studia
+                <strong>C++, Javy</strong> a nyní pokračuji v <strong>PHP</strong>. Pro svoje osobní projekty jsem si ale oblíbil
+                <strong>C# a .NET Framework.</strong> Zejména development mobilních a desktopových aplikací v .NET Maui a webových aplikací v ASP.NET Core s Blazorem.
+                
+            </p>
+            <p>
+                Jeden z mých mnoha koníčků je také hraní počítačových her. Proto jsem si vždy chtěl nějakou vytvořit. To jsem si splnil
+                pomocí herního enginu <strong>Unity</strong>, kde jsem vyvořil několik her, a to jak 3D tak 2D. 
+            </p>
+        </div>
+        <div class="about-stats">
+            <div class="stat">
+                <span class="stat-number">4+</span>
+                <span>Roky programování</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">3+</span>
+                <span>Projekty</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="skills" class="skills-section">
+    <h2>Moje dovednosti</h2>
+    <div class="skills-grid">
+        <div class="skill-card">
+            <h3>🎮</h3>
+            <h2>Game Development</h2>
+            <p>Unity, C#, Blender, Aseprite</p>
+        </div>
+        <div class="skill-card">
+            <h3>💻</h3>
+            <h2>Web Development</h2>
+            <p>ASP.NET Blazor, HTML/CSS</p>
+        </div>
+        <div class="skill-card">
+            <h3>📱</h3>
+            <h2>App Development</h2>
+            <p>.NET Maui</p>
+        </div>
+        <div class="skill-card">
+            <h3>⚙️</h3>
+            <h2>Server & API Backend</h2>
+            <p>Networking, Linux server, API</p>
+        </div>
+    </div>
+</section>
+
+<section id="projects" class="projects-preview">
+    <h2>Aktuální projekty</h2>
+    <div class="projects-grid">
+        <a href="/projects/RobosJwlry" class="project-link">
+            <img src="Imgs/RJLogoWeb.png" alt="Robo's Jwlry" />
+            <h3>Robo's Jwlry</h3>
+            <p>Unity 2D idle tycoon</p>
+        </a>
+        <a href="/projects/ShootShipSquadron" class="project-link">
+            <img src="Imgs/SSSWebIcon.png" alt="Shoot Ship Squadron" />
+            <h3>Shoot Ship Squadron</h3>
+            <p>Unity 3D roguelike hra</p>
+        </a>
+    </div>
+</section>
+
+<section class="contact-section">
+    <h2>Moje kontakty:</h2>
+    <div class="contact-buttons">
+        <a href="mailto:davidhykys88@gmail.com" class="btn-primary">📧 Napiš mi</a>
+        <a href="https://github.com/Athylaos" class="btn-ghost">🐙 GitHub</a>
+    </div>
+</section>
+
+
+
+@code {
+    private async Task ScrollToSkills()
+    {
+        await JsRuntime.InvokeVoidAsync("eval",
+            "document.getElementById('skills').scrollIntoView({behavior: 'smooth', block: 'start'})"
+        );
+    }
+}
