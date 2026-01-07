@@ -2,59 +2,97 @@
 @inject HttpClient Http
 @rendermode InteractiveServer
 
-<h3>Status Serverů</h3>
+<section class="status-hero">
+    <h1>Status serverů</h1>
+    <p></p>
+</section>
 
-<div class="status-card">
-    <h4>🌍 Playit.gg Tunnel</h4>
-    <p>Status: <strong>@(tunnelOnline ? "🟢 Online" : "🔴 Offline")</strong></p>
-    <button class="btn-primary" @onclick="CheckTunnel">Ověřit Port</button>
-</div>
-
-<div class="status-card">
-    <h4>⛏️ Minecraft Server (LAN)</h4>
-    @if (mcData != null)
-    {
-        @if (mcData.IsOnline)
+<div class="server-panel">
+    <div class="status-card card">
+        <h2>🌍 Playit.gg Tunnel</h2>
+        @if(tunnelOnline != null)
         {
-            <p>Status: <span style="color:green">Online</span></p>
-            <p>Hráči: @mcData.Players / @mcData.MaxPlayers</p>
-            <p>Verze: @mcData.Version</p>
+            @if(tunnelOnline == true)
+            {
+                <p>Status: <span style="color:green"><strong>🟢 Online</strong></span></p>
+            }
+            else
+            {
+                <p>Status: <span style="color:darkred"><strong>🔴 Offline</strong></span></p>
+            }           
         }
         else
         {
-            <p>Status: <span style="color:red">Offline</span></p>
+            <p>Loading.....</p>
         }
-    }
-    <button class="btn-primary" @onclick="CheckMinecraft">Ověřit MC</button>
 
-    @if (!string.IsNullOrEmpty(errorMessage))
-    {
-        <div class="alert alert-danger">@errorMessage</div>
-    }
+        <div>
+            <button class="btn-primary" @onclick="CheckTunnel">Refresh</button>
+        </div>
+    </div>
+
+    <div class="status-card card">
+        <h2>⛏️ Minecraft Server (LAN)</h2>
+        @if (mcData != null)
+        {
+            @if (mcData.IsOnline)
+            {
+                <p>Status: <span style="color:green">Online</span></p>
+                <p>Hráči: @mcData.Players / @mcData.MaxPlayers</p>
+                <p>Verze: @mcData.Version</p>
+            }
+            else
+            {
+                <p>Status: <span style="color:red">Offline</span></p>
+            }
+        }
+        else
+        {
+            <p>Loading.....</p>
+        }
+        <div>
+            <button class="btn-primary" @onclick="CheckMinecraft">Refresh</button>
+        </div>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger">@errorMessage</div>
+        }
+    </div>
 </div>
 
+
 @code {
-    private bool tunnelOnline = false;
+    private bool? tunnelOnline = null;
     private McStatusResponse? mcData;
-    private string errorMessage;
+    private string errorMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CheckTunnel();
+        await CheckMinecraft();
+
+    }
 
     private async Task CheckTunnel()
     {
+        tunnelOnline = null;
         try
         {
-            errorMessage = null;
+            errorMessage = string.Empty;
             var response = await Http.GetFromJsonAsync<PortResponse>("api/ServerStatus/check-port?ip=usually-discussion.gl.joinmc.link&port=25565");
             tunnelOnline = response?.IsOnline ?? false;
         }
         catch (Exception ex)
         {
             errorMessage = "Chyba: " + ex.Message;
-            Console.WriteLine(ex); // Uvidíš chybu v konzoli prohlížeče (F12) nebo serverové konzoli
+            Console.WriteLine(ex);
         }
     }
 
     private async Task CheckMinecraft()
     {
+        mcData = null;
         var response = await Http.GetFromJsonAsync<McStatusResponse>("api/ServerStatus/mc-status?ip=10.0.1.227&port=25565");
         mcData = response;
     }
