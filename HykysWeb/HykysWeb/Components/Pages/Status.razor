@@ -1,0 +1,70 @@
+﻿@page "/server-status"
+@inject HttpClient Http
+@rendermode InteractiveServer
+
+<h3>Status Serverů</h3>
+
+<div class="status-card">
+    <h4>🌍 Playit.gg Tunnel</h4>
+    <p>Status: <strong>@(tunnelOnline ? "🟢 Online" : "🔴 Offline")</strong></p>
+    <button class="btn-primary" @onclick="CheckTunnel">Ověřit Port</button>
+</div>
+
+<div class="status-card">
+    <h4>⛏️ Minecraft Server (LAN)</h4>
+    @if (mcData != null)
+    {
+        @if (mcData.IsOnline)
+        {
+            <p>Status: <span style="color:green">Online</span></p>
+            <p>Hráči: @mcData.Players / @mcData.MaxPlayers</p>
+            <p>Verze: @mcData.Version</p>
+        }
+        else
+        {
+            <p>Status: <span style="color:red">Offline</span></p>
+        }
+    }
+    <button class="btn-primary" @onclick="CheckMinecraft">Ověřit MC</button>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger">@errorMessage</div>
+    }
+</div>
+
+@code {
+    private bool tunnelOnline = false;
+    private McStatusResponse? mcData;
+    private string errorMessage;
+
+    private async Task CheckTunnel()
+    {
+        try
+        {
+            errorMessage = null;
+            var response = await Http.GetFromJsonAsync<PortResponse>("api/ServerStatus/check-port?ip=usually-discussion.gl.joinmc.link&port=25565");
+            tunnelOnline = response?.IsOnline ?? false;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Chyba: " + ex.Message;
+            Console.WriteLine(ex); // Uvidíš chybu v konzoli prohlížeče (F12) nebo serverové konzoli
+        }
+    }
+
+    private async Task CheckMinecraft()
+    {
+        var response = await Http.GetFromJsonAsync<McStatusResponse>("api/ServerStatus/mc-status?ip=10.0.1.227&port=25565");
+        mcData = response;
+    }
+
+    class PortResponse { public bool IsOnline { get; set; } public string Message { get; set; } }
+    class McStatusResponse
+    {
+        public bool IsOnline { get; set; }
+        public string Players { get; set; }
+        public string MaxPlayers { get; set; }
+        public string Version { get; set; }
+    }
+}

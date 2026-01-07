@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HykysWeb.Client\HykysWeb.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.1" />
+    <PackageReference Include="MineStat" Version="3.1.2" />
   </ItemGroup>
 
   <ItemGroup>
