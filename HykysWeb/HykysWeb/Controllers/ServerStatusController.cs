@@ -71,5 +71,40 @@ namespace HykysWeb.Controllers
         }
 
 
+        [HttpGet("check-web")]
+        public async Task<IActionResult> CheckWeb(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return BadRequest("URL nesmí být prázdná.");
+            }
+
+            if (!url.StartsWith("http://") && !url.StartsWith("https://"))
+            {
+                url = "https://" + url;
+            }
+
+            try
+            {
+                using var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+                httpClient.Timeout = TimeSpan.FromSeconds(10);
+                var response = await httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(new { IsOnline = true, StatusCode = (int)response.StatusCode });
+                }
+                else
+                {
+                    return Ok(new { IsOnline = false, StatusCode = (int)response.StatusCode, Message = "Server returned error" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { IsOnline = false, Message = ex.Message });
+            }
+        }
+
     }
 }

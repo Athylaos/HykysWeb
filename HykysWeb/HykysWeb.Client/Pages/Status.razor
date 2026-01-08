@@ -32,6 +32,30 @@
     </div>
 
     <div class="status-card card">
+        <h2>🗺️ Minecraft server map</h2>
+        @if (mapResponse != null)
+        {
+            @if (mapResponse.IsOnline)
+            {
+                <p>Status: <span style="color:green"><strong>🟢 Online</strong></span></p>
+                <a href="https://mc-map.hykys.eu" class="btn-ghost">Otevřít mapu</a>
+            }
+            else
+            {
+                <p>Status: <span style="color:darkred"><strong>🔴 Offline</strong></span></p>
+            }
+        }
+        else
+        {
+            <p>Loading.....</p>
+        }
+
+        <div>
+            <button class="btn-primary" @onclick="CheckMcMap">Refresh</button>
+        </div>
+    </div>
+
+    <div class="status-card card">
         <h2>⛏️ Minecraft Server (LAN)</h2>
         @if (mcData != null)
         {
@@ -66,6 +90,7 @@
     private bool? tunnelOnline = null;
     private McStatusResponse? mcData;
     private string errorMessage = string.Empty;
+    private WebResponse? mapResponse;
 
     protected override async Task OnInitializedAsync()
     {
@@ -77,8 +102,27 @@
     {
         var t1 = CheckTunnel();
         var t2 = CheckMinecraft();
+        var t3 = CheckMcMap();
 
-        await Task.WhenAll(t1, t2);
+        await Task.WhenAll(t1, t2, t3);
+    }
+
+    private async Task CheckMcMap()
+    {
+        mapResponse = null;
+        StateHasChanged();
+        try
+        {
+            errorMessage = string.Empty;
+            mapResponse = await Http.GetFromJsonAsync<WebResponse>("api/ServerStatus/check-web?url=mc-map.hykys.eu");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Error: " + ex.Message;
+            Console.WriteLine(ex);
+        }
+
+        StateHasChanged();
     }
 
     private async Task CheckTunnel()
@@ -118,7 +162,18 @@
         StateHasChanged();
     }
 
-    class PortResponse { public bool IsOnline { get; set; } public string Message { get; set; } }
+
+    class PortResponse
+    {
+        public bool IsOnline { get; set; }
+        public string Message { get; set; }
+    }
+    class WebResponse
+    {
+        public bool IsOnline { get; set; }
+        public int StatusCode { get; set; }
+        public string Message { get; set; }
+    }
     class McStatusResponse
     {
         public bool IsOnline { get; set; }
