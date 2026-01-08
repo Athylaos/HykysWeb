@@ -1,6 +1,6 @@
 ﻿@page "/server-status"
 @inject HttpClient Http
-@rendermode InteractiveServer
+@rendermode InteractiveAuto
 
 <section class="status-hero">
     <h1>Status serverů</h1>
@@ -69,14 +69,22 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await CheckTunnel();
-        await CheckMinecraft();
+        _ = LoadDataAsync();
 
+    }
+
+    private async Task LoadDataAsync()
+    {
+        var t1 = CheckTunnel();
+        var t2 = CheckMinecraft();
+
+        await Task.WhenAll(t1, t2);
     }
 
     private async Task CheckTunnel()
     {
         tunnelOnline = null;
+        StateHasChanged();
         try
         {
             errorMessage = string.Empty;
@@ -85,16 +93,29 @@
         }
         catch (Exception ex)
         {
-            errorMessage = "Chyba: " + ex.Message;
+            errorMessage = "Error: " + ex.Message;
             Console.WriteLine(ex);
         }
+
+        StateHasChanged();
     }
 
     private async Task CheckMinecraft()
     {
         mcData = null;
-        var response = await Http.GetFromJsonAsync<McStatusResponse>("api/ServerStatus/mc-status?ip=10.0.1.227&port=25565");
-        mcData = response;
+        StateHasChanged();
+        try
+        {
+            var response = await Http.GetFromJsonAsync<McStatusResponse>("api/ServerStatus/mc-status?ip=10.0.1.227&port=25565");
+            mcData = response;
+        }
+        catch(Exception ex)
+        {
+            errorMessage = "CErrir: " + ex.Message;
+            Console.WriteLine(ex);
+        }
+
+        StateHasChanged();
     }
 
     class PortResponse { public bool IsOnline { get; set; } public string Message { get; set; } }

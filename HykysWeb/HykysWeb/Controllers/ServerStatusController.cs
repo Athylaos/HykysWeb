@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MineStatLib;
+using System.Net;
 using System.Net.Sockets;
 
 namespace HykysWeb.Controllers
@@ -15,10 +16,13 @@ namespace HykysWeb.Controllers
 
             try
             {
-                using var client = new TcpClient();
+                using var client = new TcpClient(AddressFamily.InterNetwork);
+                var timeoutTask = Task.Delay(5000);
 
-                var connectTask = client.ConnectAsync(ip, port);
-                var timeoutTask = Task.Delay(3000);
+                var addresses = await Dns.GetHostAddressesAsync(ip);
+                var targetIp = addresses.FirstOrDefault();
+
+                var connectTask = client.ConnectAsync(targetIp, port);
                 var completedTask = await Task.WhenAny(connectTask, timeoutTask);
 
                 if (completedTask == connectTask && client.Connected)
