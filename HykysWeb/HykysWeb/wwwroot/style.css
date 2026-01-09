@@ -669,17 +669,16 @@ h2 {
 
 .project-image {
     flex: 0 0 auto;
-    min-width:260px;
-    max-width:400px;
+    max-width: 400px;
 }
 
     .project-image img {
         width: 100%;
-        aspect-ratio:1/1;
+        aspect-ratio: 1/1;
         border-radius: 200px;
         box-shadow: var(--shadow-md);
         object-fit: cover;
-        margin-bottom:10px;
+        margin-bottom: 10px;
     }
 
 .project-content {
@@ -694,7 +693,7 @@ h2 {
 
     .project-content h2 {
         margin-bottom: 6px;
-        margin-top:0;
+        margin-top: 0;
         color: var(--text-primary);
     }
 
@@ -717,7 +716,7 @@ h2 {
     margin-bottom: 12px;
 }
 
-.btn-primary,.btn-ghost {
+.btn-primary, .btn-ghost {
     border-radius: 999px;
     padding: 8px 18px;
     font-size: 0.9rem;
@@ -756,8 +755,8 @@ h2 {
     gap: 6px;
     font-size: 0.75rem;
     color: var(--text-primary);
-    align-items:center;
-    justify-content:center;
+    align-items: center;
+    justify-content: center;
 }
 
     .project-tags span {
@@ -767,13 +766,14 @@ h2 {
         border: 1px solid var(--border-color);
     }
 
-@media (min-width: 1200px) {
+@media (max-width: 768px) {
     .project-row {
         max-width: 100%;
     }
 
     .project-image {
-        flex: 0 0 380px;
+        flex: 0 0 auto;
+        max-width: 350px;
     }
 }
 
@@ -865,32 +865,9 @@ h2 {
 }
 
 .stat span:last-child {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     color: var(--text-secondary);
     font-weight: 500;
-}
-
-@media (max-width: 768px) {
-    .about-me-content {
-        grid-template-columns: 1fr;
-        gap: 40px;
-        text-align: center;
-    }
-
-    .about-text {
-        text-align: center;
-    }
-
-    .about-stats {
-        flex-direction: row;
-        justify-content: center;
-    }
-
-    .stat {
-        flex: 1;
-        max-width: 120px;
-        box-shadow: var(--shadow-sm);
-    }
 }
 
 .skills-section, .projects-preview, .contact-section {
@@ -903,8 +880,8 @@ h2 {
 .skills-grid, .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 30px;
-    margin-top: 40px;
+    gap: 25px;
+    margin-top: 35px;
 }
 
 .skill-card {
@@ -920,14 +897,15 @@ h2 {
         transform: translateY(-8px);
         box-shadow: var(--shadow-lg);
     }
-    .skill-card h3{
-        font-size:30px;
-        margin:10px 0;
+
+    .skill-card h3 {
+        font-size: 30px;
+        margin: 10px 0;
     }
+
     .skill-card h2 {
         margin: 5px 0 10px 0;
-        min-height:75px;
-
+        min-height: 75px;
     }
 
 .project-link {
@@ -964,6 +942,27 @@ h2 {
 }
 
 @media (max-width: 768px) {
+    .about-me-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+    }
+
+    .about-text {
+        text-align: center;
+    }
+
+    .about-stats {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .stat {
+        flex: 1;
+        max-width: 120px;
+        box-shadow: var(--shadow-sm);
+    }
+
     .about-hero {
         grid-template-columns: 1fr;
         gap: 40px;
@@ -973,7 +972,12 @@ h2 {
     .hero-content h1 {
         font-size: 2.5rem;
     }
+
+    .stat span:last-child {
+        font-size: 0.6rem;
+    }
 }
+
 
 
 /*
@@ -987,7 +991,7 @@ h2 {
     flex-direction: column;
     align-items: center;
     gap: 30px;
-    padding: 0 20px 60px 20px; 
+    padding: 0 20px 60px 20px;
     width: 100%;
 }
 
@@ -1003,6 +1007,7 @@ h2 {
     flex-direction: column;
     text-align: center;
 }
+
     .status-card h2 {
         margin-top: 0;
         margin-bottom: 20px;
@@ -1036,14 +1041,16 @@ h2 {
     font-size: 0.9rem;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .server-panel {
         padding: 0 15px 40px 15px;
     }
 
     .status-card {
         padding: 20px;
+        max-width: 100%;
     }
+
         .status-card h2 {
             font-size: 1.3rem;
         }

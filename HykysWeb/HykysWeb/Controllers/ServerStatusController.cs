@@ -17,10 +17,10 @@ namespace HykysWeb.Controllers
             try
             {
                 using var client = new TcpClient(AddressFamily.InterNetwork);
-                var timeoutTask = Task.Delay(5000);
+                var timeoutTask = Task.Delay(3000);
 
                 var addresses = await Dns.GetHostAddressesAsync(ip);
-                var targetIp = addresses.FirstOrDefault();
+                var targetIp = addresses.FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
 
                 var connectTask = client.ConnectAsync(targetIp, port);
                 var completedTask = await Task.WhenAny(connectTask, timeoutTask);
