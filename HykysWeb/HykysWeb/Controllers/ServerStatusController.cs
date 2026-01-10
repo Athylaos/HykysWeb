@@ -13,6 +13,10 @@ namespace HykysWeb.Controllers
         [HttpGet("check-port")]
         public async Task<IActionResult> CheckPort(string ip, int port)
         {
+            if(ip == "mcStatus")
+            {
+                ip = "mc.hykys.eu";
+            }
 
             try
             {

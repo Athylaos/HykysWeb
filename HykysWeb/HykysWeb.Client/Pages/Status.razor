@@ -3,91 +3,97 @@
 @rendermode InteractiveAuto
 
 <section class="status-hero">
-    <h1>Status serverů</h1>
-    <p></p>
+    <h1 class="">Status serverů</h1>
 </section>
-
 <div class="server-panel">
-    <div class="status-card card">
-        <h2>🌍 Playit.gg Tunnel</h2>
-        @if(tunnelOnline != null)
-        {
-            @if(tunnelOnline == true)
-            {
-                <p>Status: <span style="color:green"><strong>🟢 Online</strong></span></p>
-            }
-            else
-            {
-                <p>Status: <span style="color:darkred"><strong>🔴 Offline</strong></span></p>
-            }           
-        }
-        else
-        {
-            <p>Loading.....</p>
-        }
+    <div class="status-category">
+        <h1>Minecraft</h1>
+        <div class="status-grid">
+            <div class="status-card card">
+                <h2>⚙️ Správa pro hráče</h2>
+                @if (tunnelOnline != null)
+                {
+                    @if (tunnelOnline == true)
+                    {
+                        <p>Status: <span style="color:green"><strong>Online</strong></span></p>
+                    }
+                    else
+                    {
+                        <p>Status: <span style="color:darkred"><strong>Offline</strong></span></p>
+                    }
+                }
+                else
+                {
+                    <p>Loading.....</p>
+                }
 
-        <div>
-            <button class="btn-primary" @onclick="CheckTunnel">Refresh</button>
+                <button class="btn-primary" @onclick="CheckTunnel">Refresh</button>
+            </div>
+
+            <div class="status-card card">
+                <h2>⛏️ Minecraft Server Info</h2>
+                @if (mcData != null)
+                {
+                    @if (mcData.IsOnline)
+                    {
+                        <p>Ip Status: <span style="color:@tunnelColor; font-weight:bold">@tunnelStatus</span></p>
+                        <p>Status: <span style="color:green; font-weight:bold">Online</span></p>
+                        <p>Hráči: @mcData.Players / @mcData.MaxPlayers</p>
+                        <p>Verze: @mcData.Version</p>
+                    }
+                    else
+                    {
+                        <p>Status: <span style="color:red; font-weight:bold">Offline</span></p>
+                    }
+                }
+                else
+                {
+                    <p>Loading.....</p>
+                }
+                <button class="btn-primary" @onclick="CheckMinecraft">Refresh</button>
+
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <div class="alert alert-danger">@errorMessage</div>
+                }
+            </div>
+
+            <div class="status-card card">
+                <h2>🗺️ Minecraft server map</h2>
+                @if (mapResponse != null)
+                {
+                    @if (mapResponse.IsOnline)
+                    {
+                        <p>Status: <span style="color:green"><strong>Online</strong></span></p>
+                        <a href="https://mc-map.hykys.eu" class="btn-ghost">Otevřít mapu</a>
+                    }
+                    else
+                    {
+                        <p>Status: <span style="color:darkred"><strong>Offline</strong></span></p>
+                    }
+                }
+                else
+                {
+                    <p>Loading.....</p>
+                }
+
+                <button class="btn-primary" @onclick="CheckMcMap">Refresh</button>
+            </div>
+
         </div>
     </div>
 
-    <div class="status-card card">
-        <h2>🗺️ Minecraft server map</h2>
-        @if (mapResponse != null)
-        {
-            @if (mapResponse.IsOnline)
-            {
-                <p>Status: <span style="color:green"><strong>🟢 Online</strong></span></p>
-                <a href="https://mc-map.hykys.eu" class="btn-ghost">Otevřít mapu</a>
-            }
-            else
-            {
-                <p>Status: <span style="color:darkred"><strong>🔴 Offline</strong></span></p>
-            }
-        }
-        else
-        {
-            <p>Loading.....</p>
-        }
+   
 
-        <div>
-            <button class="btn-primary" @onclick="CheckMcMap">Refresh</button>
-        </div>
-    </div>
+   
 
-    <div class="status-card card">
-        <h2>⛏️ Minecraft Server (LAN)</h2>
-        @if (mcData != null)
-        {
-            @if (mcData.IsOnline)
-            {
-                <p>Status: <span style="color:green">Online</span></p>
-                <p>Hráči: @mcData.Players / @mcData.MaxPlayers</p>
-                <p>Verze: @mcData.Version</p>
-            }
-            else
-            {
-                <p>Status: <span style="color:red">Offline</span></p>
-            }
-        }
-        else
-        {
-            <p>Loading.....</p>
-        }
-        <div>
-            <button class="btn-primary" @onclick="CheckMinecraft">Refresh</button>
-        </div>
-
-        @if (!string.IsNullOrEmpty(errorMessage))
-        {
-            <div class="alert alert-danger">@errorMessage</div>
-        }
-    </div>
 </div>
 
 
 @code {
     private bool? tunnelOnline = null;
+    private string tunnelStatus = "Loading.....";
+    private string tunnelColor = "var(--text - secondary)";
     private McStatusResponse? mcData;
     private string errorMessage = string.Empty;
     private WebResponse? mapResponse;
@@ -128,17 +134,29 @@
     private async Task CheckTunnel()
     {
         tunnelOnline = null;
+        tunnelStatus = "Loading.....";
+        tunnelColor = "var(--text - secondary)";
         StateHasChanged();
         try
         {
             errorMessage = string.Empty;
-            var response = await Http.GetFromJsonAsync<PortResponse>("api/ServerStatus/check-port?ip=usually-discussion.gl.joinmc.link&port=25565");
+            var response = await Http.GetFromJsonAsync<PortResponse>("api/ServerStatus/check-port?ip=mcStatus&port=25565");
             tunnelOnline = response?.IsOnline ?? false;
         }
         catch (Exception ex)
         {
             errorMessage = "Error: " + ex.Message;
             Console.WriteLine(ex);
+        }
+        if (tunnelOnline == true)
+        {
+            tunnelStatus = "Online";
+            tunnelColor = "green";
+        }
+        else
+        {
+            tunnelStatus = "Offline";
+            tunnelColor = "red";
         }
 
         StateHasChanged();
@@ -155,7 +173,7 @@
         }
         catch(Exception ex)
         {
-            errorMessage = "CErrir: " + ex.Message;
+            errorMessage = "Error: " + ex.Message;
             Console.WriteLine(ex);
         }
 
