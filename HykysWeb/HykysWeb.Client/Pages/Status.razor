@@ -1,5 +1,6 @@
 ﻿@page "/server-status"
 @inject HttpClient Http
+@inject NavigationManager NM
 @rendermode InteractiveAuto
 
 <section class="status-hero">
@@ -11,23 +12,29 @@
         <div class="status-grid">
             <div class="status-card card">
                 <h2>⚙️ Správa pro hráče</h2>
-                @if (tunnelOnline != null)
+                @if (!isLoggedUser)
                 {
-                    @if (tunnelOnline == true)
+                    <div class="minecraft-login">
+                        <EditForm Model="loginModel" OnValidSubmit="TryLogin">
+                            <h4>Zadej heslo:</h4>
+                            <InputText type="password" @bind-Value="loginModel.Password" class="form-control" />
+                            <button type="submit" class="btn-primary">Login</button>
+                        </EditForm>
+                    </div>
+                    @if (errorMessage == "Unauthorized")
                     {
-                        <p>Status: <span style="color:green"><strong>Online</strong></span></p>
-                    }
-                    else
-                    {
-                        <p>Status: <span style="color:darkred"><strong>Offline</strong></span></p>
+                        <p class="alert-danger">Wrong password</p>
                     }
                 }
                 else
                 {
-                    <p>Loading.....</p>
-                }
+                    <p>Ip: <span>@userIP</span></p>
+                    <div class="status-btns-container">
+                        <button class="btn-ghost" @onclick="Logout">Logout</button>
+                        <button class="btn-primary" @onclick="LoggedUserRefresh">Refresh</button>
+                    </div>
 
-                <button class="btn-primary" @onclick="CheckTunnel">Refresh</button>
+                }
             </div>
 
             <div class="status-card card">
@@ -51,11 +58,6 @@
                     <p>Loading.....</p>
                 }
                 <button class="btn-primary" @onclick="CheckMinecraft">Refresh</button>
-
-                @if (!string.IsNullOrEmpty(errorMessage))
-                {
-                    <div class="alert alert-danger">@errorMessage</div>
-                }
             </div>
 
             <div class="status-card card">
@@ -97,6 +99,9 @@
     private McStatusResponse? mcData;
     private string errorMessage = string.Empty;
     private WebResponse? mapResponse;
+    private bool isLoggedUser = false;
+    private LoginRequest loginModel = new();
+    private string userIP = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -180,6 +185,55 @@
         StateHasChanged();
     }
 
+    private async Task TryLogin()
+    {
+        errorMessage = string.Empty;
+        var response = await Http.PostAsJsonAsync("api/ServerStatus/mc-login", loginModel);
+
+        if (response.IsSuccessStatusCode)
+        {
+            isLoggedUser = true;
+            ShowIP();
+        }
+        StateHasChanged();
+        errorMessage = response.StatusCode.ToString();
+
+    }
+
+    private async Task ShowIP()
+    {
+        try
+        {
+            StateHasChanged();
+
+            var response = await Http.GetAsync("api/ServerStatus/mc-ip");
+            var result = await response.Content.ReadFromJsonAsync<IpResponse>();
+            userIP = result.ip;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async Task Logout()
+    {
+        await Http.PostAsync("api/ServerStatus/mc-logout", null);
+        isLoggedUser = false;
+        StateHasChanged();
+    }
+
+    private async Task LoggedUserRefresh()
+    {
+        ShowIP();
+        
+    }
+
+
 
     class PortResponse
     {
@@ -198,5 +252,13 @@
         public string Players { get; set; }
         public string MaxPlayers { get; set; }
         public string Version { get; set; }
+    }
+    class LoginRequest
+    {
+        public string Password { get; set; } = "";
+    }
+    class IpResponse
+    {
+        public string ip { get; set; } = "";
     }
 }

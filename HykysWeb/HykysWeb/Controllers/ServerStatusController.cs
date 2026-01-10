@@ -1,21 +1,76 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using MineStatLib;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection.Metadata.Ecma335;
+using System.Security.Claims;
 
 namespace HykysWeb.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ServerStatusController : ControllerBase
     {
-        [HttpGet("check-port")]
+        private readonly IConfiguration _config;
+        private readonly ILogger<ServerStatusController> _logger;
+
+        public class LoginRequest
+        {
+            public string Password { get; set; } = "";
+        }
+
+        public ServerStatusController(IConfiguration config, ILogger<ServerStatusController> logger)
+        {
+            _config = config;
+            _logger = logger;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("mc-login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            var correctPassword = _config["MCSettings:Password"];
+            if (request.Password != correctPassword)
+            {
+                return Unauthorized("Wrong password");
+            }
+
+            var claims = new[] { new Claim(ClaimTypes.Name, "User") };
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            return Ok("Logged in");
+
+        }
+
+        [Authorize]
+        [HttpGet("mc-ip")]
+        public IActionResult GetIp()
+        {
+            return Ok(new { ip = _config["MCSettings:Ip"] });
+        }
+
+        [HttpGet("mc-logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return Ok("Signed out");
+        }
+
+
+        [HttpPost("check-port")]
         public async Task<IActionResult> CheckPort(string ip, int port)
         {
             if(ip == "mcStatus")
             {
-                ip = "mc.hykys.eu";
+                ip = _config["MCSettings:Ip"];
             }
 
             try
@@ -43,7 +98,6 @@ namespace HykysWeb.Controllers
                 return Ok(new { IsOnline = false, Message = "Can't connect"});
             }
         }
-
 
         [HttpGet("mc-status")]
         public IActionResult GetMinecraftStatus(string ip, int port = 25565)
@@ -73,7 +127,6 @@ namespace HykysWeb.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
 
         [HttpGet("check-web")]
         public async Task<IActionResult> CheckWeb(string url)
