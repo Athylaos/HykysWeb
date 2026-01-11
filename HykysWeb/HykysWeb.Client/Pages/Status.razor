@@ -28,7 +28,8 @@
                 }
                 else
                 {
-                    <p>Ip: <span>@userIP</span></p>
+                    <p>Ip: <span>@ipResponse.ip1</span></p>
+                    <p>Ip: <span>@ipResponse.ip2</span></p>
                     <div class="status-btns-container">
                         <button class="btn-ghost" @onclick="Logout">Logout</button>
                         <button class="btn-primary" @onclick="LoggedUserRefresh">Refresh</button>
@@ -101,7 +102,7 @@
     private WebResponse? mapResponse;
     private bool isLoggedUser = false;
     private LoginRequest loginModel = new();
-    private string userIP = string.Empty;
+    private IpResponse ipResponse = new IpResponse();
 
     protected override async Task OnInitializedAsync()
     {
@@ -146,6 +147,7 @@
         {
             errorMessage = string.Empty;
             var response = await Http.GetFromJsonAsync<McIpStatus>("api/ServerStatus/mc-ip-status");
+            errorMessage = response.Message;
             tunnelOnline = response?.IsOnline ?? false;
         }
         catch (Exception ex)
@@ -206,9 +208,8 @@
         {
             StateHasChanged();
 
-            var response = await Http.GetAsync("api/ServerStatus/mc-ip");
-            var result = await response.Content.ReadFromJsonAsync<IpResponse>();
-            userIP = result.ip;
+            var response = await Http.GetFromJsonAsync<IpResponse>("api/ServerStatus/mc-ip");
+            ipResponse = response ?? new IpResponse() { ip1 = "Error", ip2 = "Error" }; ;
         }
         catch (Exception ex)
         {
@@ -259,6 +260,7 @@
     }
     class IpResponse
     {
-        public string ip { get; set; } = "";
+        public string ip1 { get; set; } = "";
+        public string ip2 { get; set; } = "";
     }
 }

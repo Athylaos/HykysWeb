@@ -59,9 +59,9 @@ namespace HykysWeb.Controllers
 
         [Authorize]
         [HttpGet("mc-ip")]
-        public IActionResult GetIp()
+        public IActionResult GetIps()
         {
-            return Ok(new { ip = _config["MCSettings:Ip"] });
+            return Ok(new { ip1 = _config["MCSettings:Ip1"], ip2 = _config["MCSettings:Ip2"] });
         }
 
         [HttpGet("mc-logout")]
@@ -101,10 +101,11 @@ namespace HykysWeb.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("mc-ip-status")]
         public async Task<IActionResult> CheckMinecraftIpStatus()
         {
-            string ip = _config["MCSettings:Ip"];
+            string ip = _config["MCSettings:Ip1"];
             string serverAddress = $"{ip}:{25565}";
             string url = $"https://api.mcsrvstat.us/simple/{serverAddress}";
 
