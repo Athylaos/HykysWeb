@@ -111,7 +111,7 @@
 
     private async Task LoadDataAsync()
     {
-        var t1 = CheckTunnel();
+        var t1 = CheckMcIp();
         var t2 = CheckMinecraft();
         var t3 = CheckMcMap();
 
@@ -136,7 +136,7 @@
         StateHasChanged();
     }
 
-    private async Task CheckTunnel()
+    private async Task CheckMcIp()
     {
         tunnelOnline = null;
         tunnelStatus = "Loading.....";
@@ -145,7 +145,7 @@
         try
         {
             errorMessage = string.Empty;
-            var response = await Http.GetFromJsonAsync<PortResponse>("api/ServerStatus/check-port?ip=mcStatus&port=25565");
+            var response = await Http.GetFromJsonAsync<McIpStatus>("api/ServerStatus/mc-ip-status");
             tunnelOnline = response?.IsOnline ?? false;
         }
         catch (Exception ex)
@@ -235,7 +235,7 @@
 
 
 
-    class PortResponse
+    class McIpStatus
     {
         public bool IsOnline { get; set; }
         public string Message { get; set; }

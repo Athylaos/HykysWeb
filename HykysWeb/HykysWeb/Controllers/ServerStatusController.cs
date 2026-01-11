@@ -24,6 +24,13 @@ namespace HykysWeb.Controllers
         {
             public string Password { get; set; } = "";
         }
+        public class IpStatus
+        {
+            public bool online { get; set; }
+            public string Message { get; set; }
+        }
+
+
 
         public ServerStatusController(IConfiguration config, ILogger<ServerStatusController> logger)
         {
@@ -68,11 +75,6 @@ namespace HykysWeb.Controllers
         [HttpPost("check-port")]
         public async Task<IActionResult> CheckPort(string ip, int port)
         {
-            if(ip == "mcStatus")
-            {
-                ip = _config["MCSettings:Ip"];
-            }
-
             try
             {
                 using var client = new TcpClient(AddressFamily.InterNetwork);
@@ -98,6 +100,39 @@ namespace HykysWeb.Controllers
                 return Ok(new { IsOnline = false, Message = "Can't connect"});
             }
         }
+
+        [HttpGet("mc-ip-status")]
+        public async Task<IActionResult> CheckMinecraftIpStatus()
+        {
+            string ip = _config["MCSettings:Ip"];
+            string serverAddress = $"{ip}:{25565}";
+            string url = $"https://api.mcsrvstat.us/simple/{serverAddress}";
+
+            try
+            {
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("User-Agent", "HykysWeb-StatusPage/1.0");
+
+                string responseText = await client.GetStringAsync(url);
+
+                bool isOnline = !string.IsNullOrEmpty(responseText) && !responseText.Contains("Could not get");
+                return Ok(new
+                {
+                    IsOnline = isOnline,
+                    Message = isOnline ? "Server online" : "Server offline"
+                });
+            }
+            catch(Exception ex)
+            {
+                return Ok(new
+                {
+                    IsOnline = false,
+                    Message = $"Server offline. {ex.Message}" 
+                });
+            }
+
+        }
+
 
         [HttpGet("mc-status")]
         public IActionResult GetMinecraftStatus(string ip, int port = 25565)
