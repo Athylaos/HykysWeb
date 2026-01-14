@@ -30,6 +30,7 @@
                 {
                     <p>Ip: <span>@ipResponse.ip1</span></p>
                     <p>Ip: <span>@ipResponse.ip2</span></p>
+                    <a href="Private/cloudflared.zip" download class="btn-ghost">Stáhnout cloudflared</a>
                     <div class="status-btns-container">
                         <button class="btn-ghost" @onclick="Logout">Logout</button>
                         <button class="btn-primary" @onclick="LoggedUserRefresh">Refresh</button>
@@ -40,11 +41,14 @@
 
             <div class="status-card card">
                 <h2>⛏️ Minecraft Server Info</h2>
+                @if(tunnelOnline != null)
+                {
+                    <p>Ip Status: <span style="color:@tunnelColor; font-weight:bold">@tunnelStatus</span></p>
+                }
                 @if (mcData != null)
                 {
                     @if (mcData.IsOnline)
                     {
-                        <p>Ip Status: <span style="color:@tunnelColor; font-weight:bold">@tunnelStatus</span></p>
                         <p>Status: <span style="color:green; font-weight:bold">Online</span></p>
                         <p>Hráči: @mcData.Players / @mcData.MaxPlayers</p>
                         <p>Verze: @mcData.Version</p>
@@ -112,11 +116,9 @@
 
     private async Task LoadDataAsync()
     {
-        var t1 = CheckMcIp();
-        var t2 = CheckMinecraft();
-        var t3 = CheckMcMap();
-
-        await Task.WhenAll(t1, t2, t3);
+        _ = Task.Run(async () => CheckMinecraft());
+        _ = Task.Run(async () => CheckMcIp());
+        _ = Task.Run(async () => CheckMcMap());
     }
 
     private async Task CheckMcMap()
@@ -230,7 +232,7 @@
 
     private async Task LoggedUserRefresh()
     {
-        ShowIP();
+        await ShowIP();
         
     }
 

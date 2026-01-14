@@ -16,6 +16,8 @@ appsettings.Development.json
 appsettings.Production.json
 appsettings.*.json
 
+Private/
+
 secrets.json
 *.pfx
 *.key
