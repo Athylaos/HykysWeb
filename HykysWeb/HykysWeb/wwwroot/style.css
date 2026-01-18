@@ -432,16 +432,20 @@ main {
 
 /*
     =========================================================================================================================
-    Games
+    Project pages
     =========================================================================================================================
 */
+
+.app-overlay {
+    min-height: 40vh !important;
+}
+
 
 .hero-section {
     height: 65vh;
     background-size: cover;
     background-position: center;
     position: relative;
-    border-radius: 0 0 20px 20px;
     overflow: hidden;
 }
 
@@ -596,6 +600,61 @@ h2 {
         transform: scale(1.03);
     }
 
+.gallery-grid-mobile {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    justify-items: center;
+    margin-bottom: 40px;
+}
+
+.mobile-screen {
+    width: 100%;
+    max-width: 250px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    border: 4px solid #334155;
+    transition: transform 0.3s;
+}
+
+    .mobile-screen:hover {
+        transform: translateY(-5px);
+    }
+
+.video-wrapper h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--primary);
+}
+
+.mobile-video-container {
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+    aspect-ratio: 9 / 17;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: none;
+}
+
+    .mobile-video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+.hero-text {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-flow:column;
+}
+
 @media (max-width: 768px) {
     .content-container {
         grid-template-columns: 1fr;
@@ -607,6 +666,30 @@ h2 {
 
     .game-title {
         font-size: 2.5rem;
+    }
+    .hero-content {
+        flex-direction: column-reverse;
+        text-align: center;
+    }
+
+    .hero-text {
+        text-align: center;
+        justify-content:center;
+        align-items:center;
+        display:flex;
+
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .hero-phone img {
+        max-height: 300px;
+        transform: rotate(0deg);
+    }
+    .mobile-screen {
+        max-width: 250px;
     }
 }
 
