@@ -440,6 +440,11 @@ main {
     min-height: 40vh !important;
 }
 
+.github-btn{
+    margin:7px;
+    margin
+}
+
 
 .hero-section {
     height: 65vh;
@@ -534,12 +539,26 @@ h2 {
     font-size: 1.1rem;
 }
 
+.tech-column {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.github-btn {
+    align-self: center;
+    margin-top: 10px;
+    text-align: center;
+    width: fit-content;
+}
+
 .tech-card {
     background-color: var(--bg-card);
     padding: 20px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
     margin: 0 0 10px 0;
+    width: 100%;
 }
 
 .tech-tags {
