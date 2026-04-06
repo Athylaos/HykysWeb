@@ -1131,7 +1131,7 @@ h2 {
     border-radius: 16px;
     box-shadow: var(--shadow-md);
     padding: 25px 20px;
-    min-height: 220px;
+    min-height: 180px;
     display: flex;
     width:75%;
     flex-direction: column;

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using MineStatLib;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
@@ -19,6 +20,7 @@ namespace HykysWeb.Controllers
     {
         private readonly IConfiguration _config;
         private readonly ILogger<ServerStatusController> _logger;
+        private readonly IHttpClientFactory _httpClientFactory;
 
         public class LoginRequest
         {
@@ -30,12 +32,18 @@ namespace HykysWeb.Controllers
             public string Message { get; set; }
         }
 
+        public class OnlineResponse
+        {
+            public bool IsOnline { get; set; }
+        }
 
 
-        public ServerStatusController(IConfiguration config, ILogger<ServerStatusController> logger)
+
+        public ServerStatusController(IConfiguration config, ILogger<ServerStatusController> logger, IHttpClientFactory httpClientFactory)
         {
             _config = config;
             _logger = logger;
+            _httpClientFactory = httpClientFactory;
         }
 
         [AllowAnonymous]
@@ -111,7 +119,7 @@ namespace HykysWeb.Controllers
 
             try
             {
-                var client = new HttpClient();
+                using var client = _httpClientFactory.CreateClient();
                 client.DefaultRequestHeaders.Add("User-Agent", "HykysWeb-StatusPage/1.0");
 
                 string responseText = await client.GetStringAsync(url);
@@ -179,7 +187,7 @@ namespace HykysWeb.Controllers
 
             try
             {
-                using var httpClient = new HttpClient();
+                using var httpClient = _httpClientFactory.CreateClient();
                 httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
                 httpClient.Timeout = TimeSpan.FromSeconds(10);
                 var response = await httpClient.GetAsync(url);
@@ -198,6 +206,61 @@ namespace HykysWeb.Controllers
                 return Ok(new { IsOnline = false, Message = ex.Message });
             }
         }
+
+        [HttpGet("check-cloud")]
+        public async Task<IActionResult> CheckCloud(int projectId)
+        {
+            string serviceIp = _config["IPs:NextcloudIP"];
+
+            bool isOnline = await IsServiceOnlineAsync(serviceIp);
+
+            return Ok(new OnlineResponse { IsOnline = isOnline });
+        }
+        [HttpGet("check-immich")]
+        public async Task<IActionResult> CheckImmich(int projectId)
+        {
+            string serviceIp = _config["IPs:ImmichIP"];
+
+            bool isOnline = await IsServiceOnlineAsync(serviceIp);
+
+            return Ok(new OnlineResponse { IsOnline = isOnline });
+        }
+        [HttpGet("check-guac")]
+        public async Task<IActionResult> CheckGuac(int projectId)
+        {
+            string serviceIp = _config["IPs:GuacamoleIP"];
+
+            bool isOnline = await IsServiceOnlineAsync(serviceIp);
+
+            return Ok(new OnlineResponse { IsOnline = isOnline });
+        }
+
+
+        public async Task<bool> IsServiceOnlineAsync(string address)
+        {
+            if (string.IsNullOrWhiteSpace(address)) return false;
+
+            if (address.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    using var client = _httpClientFactory.CreateClient();
+                    client.Timeout = TimeSpan.FromSeconds(5);
+                    var request = new HttpRequestMessage(HttpMethod.Head, address);
+                    using var response = await client.SendAsync(request);
+                    return response.IsSuccessStatusCode;
+                }
+                catch { return false; }
+            }
+            try
+            {
+                using var ping = new Ping();
+                var reply = await ping.SendPingAsync(address, 3000);
+                return reply.Status == IPStatus.Success;
+            }
+            catch { return false; }
+        }
+
 
     }
 }

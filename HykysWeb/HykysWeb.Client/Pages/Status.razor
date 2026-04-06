@@ -7,6 +7,75 @@
     <h1 class="">Status serverů</h1>
 </section>
 <div class="server-panel">
+
+    <div class="status-category">
+        <h1>Self Hosted</h1>
+        <div class="status-grid">
+            <div class="status-card card">
+                <h2>☁️ NextCloud</h2>
+                @if (cloudOnline != null)
+                {
+                    @if (cloudOnline.Value)
+                    {
+                        <p>Status: <span style="color:green"><strong>Online</strong></span></p>
+                    }
+                    else
+                    {
+                        <p>Status: <span style="color:darkred"><strong>Offline</strong></span></p>
+                    }
+                }
+                else
+                {
+                    <p>Loading.....</p>
+                }
+                <button class="btn-primary" @onclick="CheckCloud">Refresh</button>
+
+            </div>
+            <div class="status-card card">
+                <h2>📷 Immich</h2>
+                @if (immichOnline != null)
+                {
+                    @if (immichOnline.Value)
+                    {
+                        <p>Status: <span style="color:green"><strong>Online</strong></span></p>
+                    }
+                    else
+                    {
+                        <p>Status: <span style="color:darkred"><strong>Offline</strong></span></p>
+                    }
+                }
+                else
+                {
+                    <p>Loading.....</p>
+                }
+                <button class="btn-primary" @onclick="CheckImmich">Refresh</button>
+
+            </div>
+            <div class="status-card card">
+                <h2>🖥️ Apache Guacamole</h2>
+                @if (guacOnline != null)
+                {
+                    @if (guacOnline.Value)
+                    {
+                        <p>Status: <span style="color:green"><strong>Online</strong></span></p>
+                    }
+                    else
+                    {
+                        <p>Status: <span style="color:darkred"><strong>Offline</strong></span></p>
+                    }
+                }
+                else
+                {
+                    <p>Loading.....</p>
+                }
+                <button class="btn-primary" @onclick="CheckGuac">Refresh</button>
+
+            </div>
+            
+        </div>
+    </div>
+
+
     <div class="status-category">
         <h1>Minecraft</h1>
         <div class="status-grid">
@@ -55,7 +124,7 @@
                     }
                     else
                     {
-                        <p>Status: <span style="color:red; font-weight:bold">Offline</span></p>
+                        <p>Status: <span style="color:darkred; font-weight:bold">Offline</span></p>
                     }
                 }
                 else
@@ -108,17 +177,25 @@
     private LoginRequest loginModel = new();
     private IpResponse ipResponse = new IpResponse();
 
+    private bool? cloudOnline = null;
+    private bool? immichOnline = null;
+    private bool? guacOnline = null;
+
     protected override async Task OnInitializedAsync()
     {
-        _ = LoadDataAsync();
+        await LoadDataAsync();
 
     }
 
     private async Task LoadDataAsync()
     {
-        _ = Task.Run(async () => CheckMinecraft());
-        _ = Task.Run(async () => CheckMcIp());
-        _ = Task.Run(async () => CheckMcMap());
+        CheckCloud();
+        CheckImmich();
+        CheckGuac();
+
+        CheckMinecraft();
+        CheckMcIp();
+        CheckMcMap();
     }
 
     private async Task CheckMcMap()
@@ -165,7 +242,7 @@
         else
         {
             tunnelStatus = "Offline";
-            tunnelColor = "red";
+            tunnelColor = "darkred";
         }
 
         StateHasChanged();
@@ -233,10 +310,66 @@
     private async Task LoggedUserRefresh()
     {
         await ShowIP();
-        
+
     }
 
 
+    private async Task CheckCloud()
+    {
+        cloudOnline = null;
+        StateHasChanged();
+        try
+        {
+            var response = await Http.GetFromJsonAsync<OnlineResponse>("api/ServerStatus/check-cloud");
+
+            cloudOnline = response.IsOnline;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Error: " + ex.Message;
+            Console.WriteLine(ex);
+        }
+        StateHasChanged();
+    }
+    private async Task CheckImmich()
+    {
+        immichOnline = null;
+        StateHasChanged();
+        try
+        {
+            var response = await Http.GetFromJsonAsync<OnlineResponse>("api/ServerStatus/check-immich");
+
+            immichOnline = response.IsOnline;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Error: " + ex.Message;
+            Console.WriteLine(ex);
+        }
+        StateHasChanged();
+    }
+    private async Task CheckGuac()
+    {
+        guacOnline = null;
+        StateHasChanged();
+        try
+        {
+            var response = await Http.GetFromJsonAsync<OnlineResponse>("api/ServerStatus/check-guac");
+
+            guacOnline = response.IsOnline;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Error: " + ex.Message;
+            Console.WriteLine(ex);
+        }
+        StateHasChanged();
+    }
+
+    class OnlineResponse
+    {
+        public bool IsOnline{ get; set; }
+    }
 
     class McIpStatus
     {
